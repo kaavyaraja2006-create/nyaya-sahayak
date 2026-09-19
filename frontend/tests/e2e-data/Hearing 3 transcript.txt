@@ -1,0 +1,11 @@
+10:02:10 Judge: Proceed with the examination of PW-3.
+10:04:41 Counsel (Prosecution): Where were you at 9:30 PM on the date in question?
+10:06:18 PW-3: I saw Person A near Location A at around 9:30 PM.
+10:07:30 Counsel (Defence): Did you speak to Person A?
+10:07:52 PW-3: No, I did not speak to Person A. I was near Location A the whole time.
+10:09:12 PW-3: I cannot remember the exact time. It was about 9:30 PM, perhaps a few minutes either way.
+10:11:05 Counsel (Defence): Is it correct that the handset registered to Person A was recorded in Location B at that time?
+10:12:20 PW-3: I do not know about the handset. I only know what I saw near Location A.
+10:14:33 PW-5: I saw Person A inside the canteen near Location C at about 9:20 PM.
+10:16:40 Judge: The record will reflect the submissions on the location data.
+10:18:02 Counsel (Prosecution): The prosecution submits that DEMO-001, paragraph 1 supports corroboration of the identification.
