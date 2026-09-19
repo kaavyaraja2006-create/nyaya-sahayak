@@ -1,0 +1,13 @@
+{
+  "name": "nyayasahayak-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NyayaSahayak API server (Node 22+, no third-party dependencies): REST API, SQLite persistence, JWT auth, file storage, agent pipeline host and MCP stdio server.",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "mcp": "node --disable-warning=ExperimentalWarning mcp-server.js",
+    "demo": "node --disable-warning=ExperimentalWarning demo/mcp_demo_client.js",
+    "test": "node --disable-warning=ExperimentalWarning --test tests/api.test.js"
+  }
+}
