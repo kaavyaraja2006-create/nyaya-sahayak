@@ -1,0 +1,97 @@
+'use strict';
+/* SQLite persistence (node:sqlite). Relational tables follow the product spec; each row also keeps the full engine object in a `data` JSON column,
+   so the analysis engine (which works on whole-case objects) can be rebuilt exactly. Every array keeps its order in `seq`. */
+const { DatabaseSync } = require('node:sqlite');
+const fs = require('fs'), path = require('path');
+
+const SCHEMA = `
+PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;
+CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, full_name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, phone TEXT, password_hash TEXT NOT NULL, role TEXT NOT NULL, organization TEXT, registration_number TEXT, experience_years INTEGER, specialization TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL, settings TEXT NOT NULL DEFAULT '{}');
+CREATE TABLE IF NOT EXISTS cases(id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, case_name TEXT NOT NULL, case_number TEXT, case_type TEXT, jurisdiction TEXT, court TEXT, description TEXT, status TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL, last_analyzed_at TEXT, extra TEXT NOT NULL DEFAULT '{}');
+CREATE INDEX IF NOT EXISTS idx_cases_user ON cases(user_id);
+CREATE TABLE IF NOT EXISTS documents(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, filename TEXT, document_type TEXT, storage_path TEXT, mime_type TEXT, page_count INTEGER, extracted_text TEXT, uploaded_at TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS transcripts(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, filename TEXT, storage_path TEXT, mime_type TEXT, hearing_date TEXT, hearing_number TEXT, extracted_text TEXT, uploaded_at TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS claims(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, claim_text TEXT, source_document_id TEXT, source_type TEXT, speaker TEXT, page INTEGER, line_start INTEGER, line_end INTEGER, timestamp TEXT, status TEXT, support_strength INTEGER, conflict_strength INTEGER, uncertainty INTEGER, created_at TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS evidence(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, evidence_type TEXT, description TEXT, source_document_id TEXT, page INTEGER, timestamp TEXT, metadata TEXT, created_at TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS claim_evidence(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, claim_id TEXT, evidence_id TEXT, relationship TEXT, reason TEXT, assessment_signal INTEGER, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS claim_links(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS conflicts(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, claim_id TEXT, evidence_id TEXT, conflict_type TEXT, description TEXT, severity TEXT, requires_human_review INTEGER, created_at TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS authorities(user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, id TEXT NOT NULL, title TEXT, citation TEXT, jurisdiction TEXT, year INTEGER, source_type TEXT, text TEXT, source_file TEXT, data TEXT NOT NULL, PRIMARY KEY(user_id,id));
+CREATE TABLE IF NOT EXISTS authority_links(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, claim_id TEXT, authority_id TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS citations(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, claim_id TEXT, authority_id TEXT, source_location TEXT, matched_passage TEXT, relevance_signal REAL, potential_mismatch INTEGER, requires_review INTEGER, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS findings(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, kind TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS reviews(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, claim_id TEXT, finding_id TEXT, reviewer_id TEXT, action TEXT, comment TEXT, previous_status TEXT, new_status TEXT, created_at TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS audit_events(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, actor_type TEXT, actor_id TEXT, event_type TEXT, description TEXT, metadata TEXT, created_at TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS agent_runs(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, agent_name TEXT, status TEXT, input_summary TEXT, output_summary TEXT, started_at TEXT, completed_at TEXT, error TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS tool_calls(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, seq INTEGER NOT NULL, tool TEXT, request_id TEXT, ok INTEGER, latency_ms REAL, created_at TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,seq));
+CREATE TABLE IF NOT EXISTS reports(case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE, id TEXT NOT NULL, seq INTEGER NOT NULL, file_path TEXT, created_at TEXT, generated_by TEXT, data TEXT NOT NULL, PRIMARY KEY(case_id,id));
+CREATE TABLE IF NOT EXISTS counters(key TEXT PRIMARY KEY, value INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS revoked_tokens(jti TEXT PRIMARY KEY, exp INTEGER NOT NULL);
+`;
+const J = v => JSON.stringify(v == null ? null : v); const P = s => JSON.parse(s);
+const b = v => (v ? 1 : 0);
+
+class Store {
+  constructor(file) { fs.mkdirSync(path.dirname(file), { recursive: true }); this.db = new DatabaseSync(file); this.db.exec(SCHEMA); this.fp = new Map(); this.ufp = ''; this.afp = new Map(); this.st = {}; }
+  q(sql) {
+    if (this.st[sql]) return this.st[sql]; const st = this.db.prepare(sql); const nz = v => (v === undefined ? null : typeof v === 'boolean' ? (v ? 1 : 0) : (typeof v === 'number' && !Number.isFinite(v)) ? null : v);
+    return (this.st[sql] = { run: (...a) => st.run(...a.map(nz)), get: (...a) => st.get(...a.map(nz)), all: (...a) => st.all(...a.map(nz)) });
+  }
+  tx(fn) { this.db.exec('BEGIN'); try { const r = fn(); this.db.exec('COMMIT'); return r; } catch (e) { try { this.db.exec('ROLLBACK'); } catch (x) {} throw e; } }
+  close() { try { this.db.close(); } catch (e) {} }
+
+  /* ---- load everything into the engine's in-memory DB object ---- */
+  loadInto(DB, N) {
+    DB.users = this.q('SELECT * FROM users').all().map(r => ({ id: r.id, fullName: r.full_name, email: r.email, phone: r.phone, passwordHash: r.password_hash, role: r.role, organization: r.organization || '', registrationNumber: r.registration_number || '', experienceYears: r.experience_years, specialization: r.specialization || '', createdAt: r.created_at, updatedAt: r.updated_at }));
+    this.settings = {}; this.q('SELECT id,settings FROM users').all().forEach(r => { this.settings[r.id] = P(r.settings || '{}'); });
+    DB.counters = {}; this.q('SELECT * FROM counters').all().forEach(r => { DB.counters[r.key] = r.value; });
+    DB.authorities = this.q('SELECT data FROM authorities').all().map(r => P(r.data));
+    const rows = (t, c) => this.q(`SELECT data FROM ${t} WHERE case_id=? ORDER BY seq`).all(c).map(r => P(r.data));
+    DB.cases = this.q('SELECT * FROM cases ORDER BY created_at').all().map(r => {
+      const x = P(r.extra || '{}'); const docs = rows('documents', r.id).concat(rows('transcripts', r.id)); docs.sort((a, b) => (a.__seq || 0) - (b.__seq || 0)); docs.forEach(d => { delete d.__seq; });
+      return { id: r.id, userId: r.user_id, name: r.case_name, number: r.case_number || '', type: r.case_type || 'Other', jurisdiction: r.jurisdiction || '', court: r.court || '', description: r.description || '', status: r.status, synthetic: !!x.synthetic, createdAt: r.created_at, updatedAt: r.updated_at, lastAnalyzedAt: r.last_analyzed_at, counters: x.counters || {}, analysis: x.analysis || null,
+        documents: docs, claims: rows('claims', r.id), evidence: rows('evidence', r.id), links: rows('claim_links', r.id), relationships: rows('claim_evidence', r.id), conflicts: rows('conflicts', r.id), authorityLinks: rows('authority_links', r.id), citations: rows('citations', r.id), findings: rows('findings', r.id), reviews: rows('reviews', r.id), audit: rows('audit_events', r.id), agentRuns: rows('agent_runs', r.id), toolCalls: this.q('SELECT data FROM tool_calls WHERE case_id=? ORDER BY seq').all(r.id).map(y => P(y.data)), reports: rows('reports', r.id) };
+    });
+    this.fp.clear(); DB.cases.forEach(C => this.fp.set(C.id, this.caseFp(C))); this.ufp = this.userFp(DB); this.afp.clear(); this.authFp = this.authoritiesFp(DB);
+  }
+  caseFp(C) { return [C.updatedAt, C.status, C.name, C.documents.length, C.claims.length, C.evidence.length, C.relationships.length, C.conflicts.length, C.citations.length, C.findings.length, C.reviews.length, C.audit.length, C.agentRuns.length, C.reports.length, C.toolCalls.length, C.authorityLinks.length, C.analysis ? C.analysis.status + (C.analysis.stages || []).map(s => s.status[0]).join('') : '', C.documents.map(d => d.category + d.status).join('|')].join('~'); }
+  userFp(DB) { return DB.users.map(u => u.id + u.updatedAt + u.email).join('|') + JSON.stringify(this.settings || {}); }
+  authoritiesFp(DB) { return (DB.authorities || []).map(a => a.userId + a.id + a.addedAt).join('|'); }
+
+  /* ---- write only what changed ---- */
+  persist(DB) {
+    this.tx(() => {
+      const uf = this.userFp(DB);
+      if (uf !== this.ufp) { DB.users.forEach(u => this.q('INSERT INTO users(id,full_name,email,phone,password_hash,role,organization,registration_number,experience_years,specialization,created_at,updated_at,settings) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET full_name=excluded.full_name,phone=excluded.phone,password_hash=excluded.password_hash,role=excluded.role,organization=excluded.organization,registration_number=excluded.registration_number,experience_years=excluded.experience_years,specialization=excluded.specialization,updated_at=excluded.updated_at,settings=excluded.settings').run(u.id, u.fullName, u.email, u.phone || '', u.passwordHash, u.role, u.organization || '', u.registrationNumber || '', u.experienceYears == null ? null : u.experienceYears, u.specialization || '', u.createdAt, u.updatedAt, J(this.settings[u.id] || {}))); this.ufp = uf; }
+      const ids = new Set(DB.cases.map(c => c.id)); this.q('SELECT id FROM cases').all().forEach(r => { if (!ids.has(r.id)) { this.q('DELETE FROM cases WHERE id=?').run(r.id); this.fp.delete(r.id); } });
+      DB.cases.forEach(C => { const f = this.caseFp(C); if (this.fp.get(C.id) !== f) { this.saveCase(C, DB); this.fp.set(C.id, f); } });
+      const af = this.authoritiesFp(DB); if (af !== this.authFp) { this.q('DELETE FROM authorities').run(); (DB.authorities || []).forEach(a => this.q('INSERT INTO authorities(user_id,id,title,citation,jurisdiction,year,source_type,text,source_file,data) VALUES(?,?,?,?,?,?,?,?,?,?)').run(a.userId, a.id, a.title, a.citation, a.court || '', a.year == null ? null : a.year, a.kind, a.paras.join('\n\n'), a.sourceNote || '', J(a))); this.authFp = af; }
+      Object.entries(DB.counters || {}).forEach(([k, v]) => this.q('INSERT INTO counters(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(k, v));
+    });
+  }
+  saveCase(C, N) {
+    const x = { synthetic: !!C.synthetic, counters: C.counters, analysis: C.analysis };
+    this.q('INSERT INTO cases(id,user_id,case_name,case_number,case_type,jurisdiction,court,description,status,created_at,updated_at,last_analyzed_at,extra) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET case_name=excluded.case_name,case_number=excluded.case_number,case_type=excluded.case_type,jurisdiction=excluded.jurisdiction,court=excluded.court,description=excluded.description,status=excluded.status,updated_at=excluded.updated_at,last_analyzed_at=excluded.last_analyzed_at,extra=excluded.extra').run(C.id, C.userId, C.name, C.number || '', C.type, C.jurisdiction || '', C.court || '', C.description || '', C.status, C.createdAt, C.updatedAt, C.lastAnalyzedAt || null, J(x));
+    ['documents', 'transcripts', 'claims', 'evidence', 'claim_links', 'claim_evidence', 'conflicts', 'authority_links', 'citations', 'findings', 'reviews', 'audit_events', 'agent_runs', 'tool_calls', 'reports'].forEach(t => this.q(`DELETE FROM ${t} WHERE case_id=?`).run(C.id));
+    const claimStatus = this.claimStatus;
+    C.documents.forEach((d, i) => { const rec = { ...d, __seq: i }; const text = d.pages.map(p => p.paras.map(y => y.text).join('\n')).join('\n\f\n');
+      if (d.kind === 'transcript') this.q('INSERT INTO transcripts(case_id,id,seq,filename,storage_path,mime_type,hearing_date,hearing_number,extracted_text,uploaded_at,data) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(C.id, d.id, i, d.filename, d.storagePath || '', d.mime, d.hearingDate || '', d.hearingNumber || '', text, d.uploadedAt, J(rec));
+      else this.q('INSERT INTO documents(case_id,id,seq,filename,document_type,storage_path,mime_type,page_count,extracted_text,uploaded_at,data) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(C.id, d.id, i, d.filename, d.category, d.storagePath || '', d.mime, d.pageCount, text, d.uploadedAt, J(rec)); });
+    C.claims.forEach((c, i) => this.q('INSERT INTO claims(case_id,id,seq,claim_text,source_document_id,source_type,speaker,page,line_start,line_end,timestamp,status,support_strength,conflict_strength,uncertainty,created_at,data) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').run(C.id, c.id, i, c.text, c.sourceDocId, c.sourceType, c.speaker || '', c.page, c.start, c.end, c.timestamp || '', claimStatus ? claimStatus(C, c) : '', c.supportStrength, c.conflictStrength, c.uncertainty, c.generatedAt, J(c)));
+    C.evidence.forEach((e, i) => this.q('INSERT INTO evidence(case_id,id,seq,evidence_type,description,source_document_id,page,timestamp,metadata,created_at,data) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(C.id, e.id, i, e.type, e.description, e.sourceDocId, e.page, '', J({ para: e.para, key: e.key }), e.generatedAt, J(e)));
+    C.relationships.forEach((r, i) => this.q('INSERT INTO claim_evidence(case_id,id,seq,claim_id,evidence_id,relationship,reason,assessment_signal,data) VALUES(?,?,?,?,?,?,?,?,?)').run(C.id, r.id, i, r.claimId, r.evidenceId, r.relationship, r.reason, r.assessmentSignal == null ? null : r.assessmentSignal, J(r)));
+    (C.links || []).forEach((l, i) => this.q('INSERT INTO claim_links(case_id,id,seq,data) VALUES(?,?,?,?)').run(C.id, l.id, i, J(l)));
+    C.conflicts.forEach((k, i) => this.q('INSERT INTO conflicts(case_id,id,seq,claim_id,evidence_id,conflict_type,description,severity,requires_human_review,created_at,data) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(C.id, k.id, i, k.claimA, null, k.type, k.description, k.severity, b(k.requiresHumanReview), C.lastAnalyzedAt || C.updatedAt, J(k)));
+    C.authorityLinks.forEach((l, i) => this.q('INSERT INTO authority_links(case_id,id,seq,claim_id,authority_id,data) VALUES(?,?,?,?,?,?)').run(C.id, l.id, i, l.claimId, l.authorityId, J(l)));
+    C.citations.forEach((x, i) => this.q('INSERT INTO citations(case_id,id,seq,claim_id,authority_id,source_location,matched_passage,relevance_signal,potential_mismatch,requires_review,data) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(C.id, x.id, i, x.claimId || '', x.authorityId || '', `${x.docId} p.${x.page} ¶${x.para}`, x.matchedPassage ? x.matchedPassage.text : '', x.relevanceSignal, b(x.potentialMismatch), b(x.requiresReview), J(x)));
+    C.findings.forEach((f, i) => this.q('INSERT INTO findings(case_id,id,seq,kind,data) VALUES(?,?,?,?,?)').run(C.id, f.id, i, f.kind, J(f)));
+    C.reviews.forEach((r, i) => this.q('INSERT INTO reviews(case_id,id,seq,claim_id,finding_id,reviewer_id,action,comment,previous_status,new_status,created_at,data) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)').run(C.id, r.id, i, (r.claimIds || [])[0] || '', r.findingId, r.reviewerId, r.action, r.comment || '', r.previousStatus, r.newStatus, r.createdAt, J(r)));
+    C.audit.forEach((e, i) => this.q('INSERT INTO audit_events(case_id,id,seq,actor_type,actor_id,event_type,description,metadata,created_at,data) VALUES(?,?,?,?,?,?,?,?,?,?)').run(C.id, e.id, i, e.actorType, e.actorId || '', e.event, e.description, J(e.meta), e.ts, J(e)));
+    C.agentRuns.forEach((r, i) => this.q('INSERT INTO agent_runs(case_id,id,seq,agent_name,status,input_summary,output_summary,started_at,completed_at,error,data) VALUES(?,?,?,?,?,?,?,?,?,?,?)').run(C.id, r.id, i, r.agent, r.status, r.inputSummary, r.outputSummary, r.startedAt, r.completedAt || '', r.error || '', J(r)));
+    C.toolCalls.forEach((t, i) => this.q('INSERT INTO tool_calls(case_id,seq,tool,request_id,ok,latency_ms,created_at,data) VALUES(?,?,?,?,?,?,?,?)').run(C.id, i, t.tool, t.requestId, b(t.ok), t.latencyMs, t.ts, J(t)));
+    C.reports.forEach((r, i) => this.q('INSERT INTO reports(case_id,id,seq,file_path,created_at,generated_by,data) VALUES(?,?,?,?,?,?,?)').run(C.id, r.id, i, r.filePath || '', r.createdAt, r.generatedBy || '', J(r)));
+  }
+  isRevoked(jti) { return !!this.q('SELECT 1 FROM revoked_tokens WHERE jti=?').get(jti); }
+  revoke(jti, exp) { this.q('INSERT OR IGNORE INTO revoked_tokens(jti,exp) VALUES(?,?)').run(jti, exp); this.q('DELETE FROM revoked_tokens WHERE exp<?').run(Math.floor(Date.now() / 1000)); }
+}
+module.exports = { Store };
