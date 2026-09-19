@@ -32,7 +32,8 @@ class Settings:
         self.app_name: str = "NyayaSahayak"
         self.api_prefix: str = "/api"
 
-        self.database_url: str = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'nyayasahayak.db'}")
+        self.mongodb_uri: str = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
+        self.mongodb_db_name: str = os.getenv("MONGODB_DB_NAME", "nyayasahayak_db")
         self.data_dir: Path = Path(os.getenv("DATA_DIR", str(BASE_DIR / "data")))
         self.uploads_dir: Path = self.data_dir / "uploads"
         self.reports_dir: Path = self.data_dir / "reports"

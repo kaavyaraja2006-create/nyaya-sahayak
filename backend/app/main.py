@@ -1,4 +1,4 @@
-"""NyayaSahayak FastAPI application."""
+"""NyayaSahayak FastAPI application with PyMongo database initialization."""
 from __future__ import annotations
 
 import logging
@@ -15,9 +15,10 @@ if str(REPO_ROOT) not in sys.path:
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from .config import settings
-from .database import init_db, session_scope
+from .database import init_db_indexes, close_db_connection
 from .routes.core import auth_router, case_router
 from .routes.workflow import analysis_router, system_router
 from .services.authority_service import load_corpus
@@ -69,21 +70,22 @@ async def request_logging(request: Request, call_next):
 
 @app.on_event("startup")
 def on_startup() -> None:
-    init_db()
-    db = session_scope()
-    try:
-        count = load_corpus(db, settings.authority_corpus_dir)
-        if count == 0:
-            log.info(
-                "Authority corpus is empty — authority retrieval will report no matches. "
-                "Add verified records to %s", settings.authority_corpus_dir,
-            )
-    finally:
-        db.close()
+    init_db_indexes()
+    count = load_corpus(settings.authority_corpus_dir)
+    if count == 0:
+        log.info(
+            "Authority corpus is empty — authority retrieval will report no matches. "
+            "Add verified records to %s", settings.authority_corpus_dir,
+        )
     log.info(
         "NyayaSahayak API ready. AI provider=%s configured=%s",
         settings.ai_provider, settings.ai_configured,
     )
+
+
+@app.on_event("shutdown")
+def on_shutdown() -> None:
+    close_db_connection()
 
 
 @app.get("/api/health", tags=["system"])
@@ -95,3 +97,7 @@ app.include_router(auth_router, prefix=settings.api_prefix)
 app.include_router(case_router, prefix=settings.api_prefix)
 app.include_router(analysis_router, prefix=settings.api_prefix)
 app.include_router(system_router, prefix=settings.api_prefix)
+
+frontend_dir = REPO_ROOT / "dist"
+if frontend_dir.exists():
+    app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")

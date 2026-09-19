@@ -1,11 +1,4 @@
-"""Authority retrieval.
-
-`AuthorityService` is the interface; `CorpusAuthorityService` implements it over
-whatever verified material sits in `legal_data/authorities/*.json`. The corpus
-ships empty — the service reports honestly that nothing matched rather than
-fabricating an authority. A different backend (an external index, an embedding
-store) can be dropped in without changing the MCP tool contracts.
-"""
+"""Authority service using AuthorityRepository."""
 from __future__ import annotations
 
 import json
@@ -15,10 +8,8 @@ import re
 from collections import Counter
 from pathlib import Path
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
-from ..models import Authority, uid
+from ..models.authority import Authority
+from ..repositories.authority_repository import authority_repository, AuthorityRepository
 
 log = logging.getLogger("nyayasahayak.authorities")
 
@@ -47,9 +38,9 @@ class AuthorityService:
 
 
 class CorpusAuthorityService(AuthorityService):
-    def __init__(self, db: Session) -> None:
-        self.db = db
-        self._rows: list[Authority] = list(self.db.scalars(select(Authority)))
+    def __init__(self, repo: AuthorityRepository = authority_repository) -> None:
+        self.repo = repo
+        self._rows: list[Authority] = self.repo.list_all(limit=1000)
         self._index: list[tuple[Authority, Counter, int]] = [
             (row, Counter(terms(f"{row.title} {row.citation or ''} {row.passage}")), 0)
             for row in self._rows
@@ -95,7 +86,7 @@ class CorpusAuthorityService(AuthorityService):
         return results[:limit]
 
     def excerpt(self, authority_id: str) -> dict | None:
-        row = self.db.scalar(select(Authority).where(Authority.authority_id == authority_id))
+        row = self.repo.get_by_id(authority_id)
         if row is None:
             return None
         return {
@@ -110,8 +101,8 @@ class CorpusAuthorityService(AuthorityService):
         }
 
 
-def load_corpus(db: Session, corpus_dir: Path) -> int:
-    """Load/refresh authorities from disk. Returns the number of records loaded."""
+def load_corpus(corpus_dir: Path, repo: AuthorityRepository = authority_repository) -> int:
+    """Load/refresh authorities from disk into MongoDB repository."""
     if not corpus_dir.exists():
         return 0
     loaded = 0
@@ -132,25 +123,26 @@ def load_corpus(db: Session, corpus_dir: Path) -> int:
             passage = str(record.get("passage") or "").strip()
             if not (authority_id and title and passage):
                 continue
-            row = db.scalar(select(Authority).where(Authority.authority_id == authority_id))
-            if row is None:
-                row = Authority(id=uid(), authority_id=authority_id)
-                db.add(row)
-            row.title = title
-            row.passage = passage
-            row.label = str(record.get("label") or title)[:120]
-            row.citation = record.get("citation")
-            row.court = record.get("court")
-            row.jurisdiction = record.get("jurisdiction")
-            row.source_type = record.get("source_type")
-            row.source_file = record.get("source_file") or path.name
-            row.corpus = record.get("corpus") or path.stem
+            existing = repo.get_by_id(authority_id)
+            auth = existing or Authority(authority_id=authority_id)
+            auth.title = title
+            auth.passage = passage
+            auth.label = str(record.get("label") or title)[:120]
+            auth.citation = record.get("citation")
+            auth.court = record.get("court")
+            auth.jurisdiction = record.get("jurisdiction")
+            auth.source_type = record.get("source_type")
+            auth.source_file = record.get("source_file") or path.name
+            auth.corpus = record.get("corpus") or path.stem
             try:
-                row.year = int(record.get("year")) if record.get("year") else None
-                row.paragraph = int(record.get("paragraph")) if record.get("paragraph") else None
+                auth.year = int(record.get("year")) if record.get("year") else None
+                auth.paragraph = int(record.get("paragraph")) if record.get("paragraph") else None
             except (TypeError, ValueError):
-                row.year, row.paragraph = None, None
+                auth.year, auth.paragraph = None, None
+            if existing:
+                repo.update_one({"id": auth.id}, auth.to_dict())
+            else:
+                repo.create(auth)
             loaded += 1
-    db.commit()
     log.info("Authority corpus loaded: %s record(s) from %s", loaded, corpus_dir)
     return loaded
