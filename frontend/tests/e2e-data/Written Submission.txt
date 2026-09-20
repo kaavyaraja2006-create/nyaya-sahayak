@@ -1,7 +1,0 @@
-Written submission on behalf of the prosecution.
-
-It is submitted that the identification of Person A near Location A is corroborated by independent surveillance records [1] Corroboration of Witness Accounts by Independent Records, paragraph 1. The location data relied on by the defence is to be read with its accuracy radius, see [2] Reliability and Context of Digital Location Records, paragraph 2.
-
-The court has held that approximate recollection of time is fatal to a witness account [3] Imaginary Authority Z, paragraph 5.
-
-It is submitted that, as a proposition of law, a disagreement between two records on location always means that the record later in time must be preferred.

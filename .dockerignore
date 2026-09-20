@@ -1,7 +1,0 @@
-node_modules
-backend/data
-backend/tests
-tests
-shots
-.git
-.env
