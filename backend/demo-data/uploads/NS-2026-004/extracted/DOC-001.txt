@@ -1,0 +1,219 @@
+DEMO-ONLY NOTICE: These documents are synthetic materials created for a hackathon prototype. They are not FIRs, police records, court records, legal advice, or authentic government documents.
+
+NyayaSahayak  Synthetic Case Document Pack
+
+Case ID: NS-DEMO-002  |  State vs Vikram Nair
+
+Case identification
+
+Case name State vs Vikram Nair How you refer to this matter
+
+State vs Vikram Nair  Ashoka Road Junction Hit-and-Run Timeline Matter
+
+Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court / Ashoka Road Police Station  fictional Short description
+
+A synthetic hit-and-run evidence audit concerning whether a vehicle registered to Vikram Nair struck a pedestrian near Ashoka Road Junction at approximately 8:40 PM on 5 March 2026. The audit compares an eyewitness account, a partial CCTV plate capture, a vehicle telematics/GPS log, and a toll-booth timestamp that appears to conflict with the GPS log.
+
+Case status Hearing in progress  synthetic (three hearings on record) Next hearing 11 September 2026  synthetic Primary legal issue
+
+Whether the available material reliably places the identified vehicle at the location and time of the incident, given an unresolved timestamp discrepancy between two independent digital records.
+
+Data status All names, events, exhibits, and records are fictional.
+
+Core demonstration scenario
+
+PW-2 statement: PW-2 says a silver sedan struck a pedestrian near Ashoka Road Junction at approximately 8:40 PM and left without stopping, with a partial plate reading "TN 07". CCTV summary: The junction camera shows a silver sedan departing at speed around 8:41 PM; the remaining plate characters are obscured by motion blur and headlight glare. Vehicle telematics summary: A fleet-tracking device on a vehicle registered to Vikram Nair (plate TN07-AZ-4488) logs that vehicle at the junction at 8:41 PM. Toll-booth summary: An automated toll record shows the same plate passing a toll plaza 14 kilometres away at 8:50 PM  only nine minutes later, which the defence contends is not achievable through city traffic. A digital-forensics witness later raises a possible clock-drift explanation, which the defence disputes as unverified for this specific toll unit.
+
+Expected NyayaSahayak result: Potentially conflicted evidence across two independent digital records  human review required. The system must not conclude guilt, innocence, witness dishonesty, or final liability, and must not resolve the timestamp discrepancy on its own.DOCUMENT 1  FIRST INFORMATION REPORT
+
+Synthetic training document  not an official FIR Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court / Ashoka Road Police Station  fictional Short description
+
+Alleged hit-and-run near Ashoka Road Junction; evidence concerns the identification and timeline of the vehicle involved.
+
+District East Coast Demo District Police station Ashoka Road Police Station Date of registration 6 March 2026 Complainant
+
+Mohan Babu, age 41, delivery coordinator, brother of the injured person  fictional
+
+Place of occurrence Ashoka Road Junction, near Sunrise Bakery, Demo City Approximate time 5 March 2026, approximately 8:40 PM Investigating officer Sub-Inspector R. Farooq, Badge DEMO-29  fictional
+
+Brief contents of information
+
+The complainant states that his brother, Suresh Babu, was struck by a silver sedan while crossing near Ashoka Road Junction at approximately 8:40 PM on 5 March 2026, and that the vehicle left the scene without stopping. Bystanders assisted the injured person to a nearby clinic. A bystander noted a partial number plate. The complainant requests examination of nearby CCTV material and any available vehicle-tracking records.
+
+Limitations
+
+This synthetic document records an allegation only. It does not establish that an offence occurred, that any particular vehicle or person was involved, or that any person is legally responsible.DOCUMENT 2  FINAL REPORT / CHARGE-SHEET
+
+Synthetic training document  not an official police report Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D / FR-29-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Synthetic final-report summary concerning an alleged hit-and-run and two independent digital records whose timestamps appear to conflict.
+
+Date 20 June 2026 Investigation status Demonstration investigation completed Prosecution position
+
+The vehicle is alleged to have been identified via a partial plate and a telematics log; exact timeline and driver identification remain subject to review.
+
+Court filing status Not filed; synthetic document only
+
+Material proposed for review
+
+ID Description Limitation D-01 Synthetic FIR 208-D Records an allegation only D-02 Statement of PW-2 Reduced visibility reported at the scene E-02 CCTV summary (junction camera) Partial plate only; driver not visible E-03 Vehicle telematics / GPS log Device not independently recalibrated for this case E-04 Toll-booth passage record Timestamp reconciliation with E-03 disputed D-06 Defence statement Challenges identification and the recorded timeline
+
+Assessment
+
+The synthetic material indicates a possible presence claim but contains an unresolved conflict between two independent digital timestamps, alongside unresolved issues concerning visibility, plate identification, and device attribution. This document is not a determination that the evidence is sufficient.DOCUMENT 3  WITNESS STATEMENT
+
+Statement of PW-2 | Synthetic training document Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court / Ashoka Road Police Station  fictional Short description
+
+Witness account concerning an alleged hit-and-run near Ashoka Road Junction at approximately 8:40 PM.
+
+Evidence ID E-01 Witness Lakshmi Pillai / PW-2, shop assistant  fictional Statement date 7 March 2026 Source location Statement paragraphs 15
+
+Statement
+
+1. I was closing the shutter of my shop near Ashoka Road Junction at around 8:40 PM on 5 March 2026. 2. I heard a loud sound and saw that a silver car had struck someone near the crossing. 3. The car did not stop and turned right towards the highway service road. 4. I noted that the number plate began with "TN 07", but I could not read the remaining characters clearly because the streetlight nearest the junction was not working that evening. 5. I am not able to confirm the exact model of the car with certainty.
+
+Audit annotations
+
+Item Result Claim C-01
+
+PW-2 says a silver car with a partial plate "TN 07" struck the pedestrian and fled toward the highway service road at approximately 8:40 PM.
+
+Limitation L-01 Non-functioning streetlight reduced visibility of the remaining plate characters. Limitation L-02 Vehicle model not confirmed with certainty.DOCUMENT 4  CCTV SUMMARY
+
+Exhibit E-02 | Synthetic training document  no real footage attached This is a text summary created for demonstration. It is not a real CCTV extract, image, video, or forensic report. Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Synthetic CCTV description used to assess whether the departing vehicle can be linked to the registered owner's plate.
+
+Evidence ID E-02 Camera ID C-11 Location Ashoka Road Junction, opposite Sunrise Bakery  fictional Date / time window 5 March 2026 / 8:30 PM8:50 PM Source Synthetic camera-log summary
+
+Summary
+
+At approximately 8:41 PM, a silver sedan is seen departing the junction area at speed toward the highway service road. The rear plate is partially visible; the first four characters correspond to "TN07", but the remaining characters are obscured by motion blur and glare from an oncoming vehicle's headlights. The driver is not visible.
+
+Audit interpretation
+
+Relationship to C-01 Assessment Possible support
+
+Consistent with a vehicle matching the general description departing the junction at the time PW-2 describes.
+
+Unresolved identity Does not establish the complete plate or the identity of the driver. Human review
+
+Inspect original high-resolution footage if available; assess motion-blur correction and chain of custody.DOCUMENT 5  VEHICLE TELEMATICS / GPS LOG SUMMARY
+
+Exhibit E-03 | Synthetic training document  no real device export attached Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Synthetic fleet-tracking log summary offered to place a specific vehicle at the junction at the alleged time.
+
+Evidence ID E-03 Vehicle TN07-AZ-4488, registered to Vikram Nair, delivery contractor  fictional Provided by Employer fleet-management system  fictional Date / time of fix 5 March 2026, 8:41 PM Stated location accuracy Approximately 25 metres, per device manufacturer specification
+
+Summary
+
+The fleet-tracking device installed in vehicle TN07-AZ-4488 recorded a location fix placing the vehicle at Ashoka Road Junction at 8:41 PM on 5 March 2026. The exported log follows the manufacturer's standard format and has not been independently recalibrated for this case.
+
+Audit interpretation
+
+Relationship to C-01 Assessment Possible support Consistent with the vehicle being present at the junction at the alleged time. Unresolved attribution
+
+Fleet vehicles may be used by more than one authorised driver; the log does not by itself establish who was driving.
+
+Human review
+
+Obtain the device's calibration/certification record and the driver-assignment record for the relevant shift.DOCUMENT 6  TOLL-BOOTH PASSAGE RECORD SUMMARY
+
+Exhibit E-04 | Synthetic training document  no real ANPR export attached Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Synthetic automated-toll record introduced by the defence; its timestamp appears to conflict with the telematics log (E-03).
+
+Evidence ID E-04 Source
+
+National Highway Toll Plaza, Kavanur Bypass, approximately 14 km from the junction  fictional
+
+Date / time of record 5 March 2026, 8:50 PM Recorded plate TN07-AZ-4488
+
+Summary
+
+An automated number-plate-recognition (ANPR) toll record shows a vehicle bearing plate TN07-AZ-4488 passing the Kavanur Bypass toll plaza, approximately 14 kilometres from Ashoka Road Junction, at 8:50 PM on 5 March 2026.
+
+Audit interpretation  potential conflict
+
+If both timestamps are taken at face value, the same vehicle would need to travel approximately 14 kilometres through city traffic in about nine minutes. The defence contends this is not achievable under ordinary conditions. The prosecution has raised the possibility of a clock discrepancy in one or both systems. This is a conflict between two independent digital records and requires human review before any inference is drawn from either one.DOCUMENT 7  DEFENCE STATEMENT
+
+D-06 | Synthetic training document Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Filed on behalf of Vikram Nair, accused  fictional Filed by Defence counsel, name withheld in this synthetic pack Date 3 July 2026
+
+Statement
+
+The defence disputes that the partial plate recorded by PW-2 and the CCTV summary conclusively identifies the accused's vehicle. The defence relies on the toll-booth record (E-04) as an indicator that the vehicle could not have been at both locations as alleged, and requests a forensic timestamp-calibration review of both the fleet-tracking device (E-03) and the toll plaza's ANPR system before either record is relied upon. The defence reserves the right to call an independent witness regarding driver-shift assignment for the vehicle on the relevant evening.DOCUMENT 8  HEARING TRANSCRIPT
+
+Hearing 1 | Synthetic training document Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+First hearing: examination of PW-2 and marking of the CCTV summary as an exhibit.
+
+Hearing date 10 July 2026 Hearing type Preliminary witness and exhibit review Transcript status Prepared synthetic transcript
+
+Transcript
+
+[00:00:04] COURT The prosecution may begin the examination of PW-2. [00:00:22] PW-2 I was closing my shop near the junction at around 8:40 PM. [00:00:40] PW-2 I heard a sound and saw a silver car had struck someone near the crossing. [00:01:05] PW-2 I noted the plate began with TN 07, but I could not read the rest clearly. [00:01:28] DEFENCE COUNSEL Was the streetlight near the junction working that evening? [00:01:36] PW-2 No, it was not working. It was quite dark at that spot.
+
+[00:02:02] PROSECUTOR The CCTV summary from Camera C-11 records a matching partial plate at 8:41 PM.
+
+[00:02:20] COURT The CCTV summary shall be marked as Exhibit E-02.
+
+[00:02:40] DEFENCE COUNSEL We reserve comment on identification until the complete plate, if any, is established. [00:02:55] COURT Noted. The investigating officer shall produce any available vehicle-tracking material at the next hearing.
+
+Extracted audit items
+
+C-01: Silver car with partial plate TN 07 allegedly struck the pedestrian near the junction at approximately 8:40 PM and fled. Q-01: Can the complete plate be established from any other source?DOCUMENT 9  HEARING TRANSCRIPT
+
+Hearing 2 | Synthetic training document Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Second hearing: the vehicle telematics log is presented and the defence introduces a toll-booth record that appears to conflict with it.
+
+Hearing date 31 July 2026 Hearing type Evidence review  telematics and toll record Transcript status Prepared synthetic transcript
+
+Transcript
+
+[00:00:06] COURT The prosecution may present the vehicle-tracking material referred to at the last hearing. [00:00:24] PROSECUTOR The fleet-tracking device on vehicle TN07-AZ-4488, registered to the accused, recorded that vehicle at the junction at 8:41 PM.
+
+[00:00:52] COURT This shall be marked as Exhibit E-03.
+
+[00:01:10] DEFENCE COUNSEL We now produce a toll-booth record showing the same plate passing the Kavanur Bypass toll plaza, fourteen kilometres away, at 8:50 PM.
+
+[00:01:38] COURT This shall be marked as Exhibit E-04.
+
+[00:01:50] DEFENCE COUNSEL Nine minutes is not sufficient to travel fourteen kilometres through city traffic. The two records cannot both be correct as read. [00:02:15] PROSECUTOR We do not concede the point. It is possible one of the two clocks is not accurately set. We request time to examine both systems' calibration records.
+
+[00:02:40] COURT The apparent conflict between Exhibit E-03 and Exhibit E-04 is noted. This matter requires human review and shall not be treated as resolved. The investigating officer shall obtain calibration information for both systems before the next hearing.
+
+Extracted audit items
+
+C-02: Telematics log places the vehicle at the junction at 8:41 PM. C-03: Toll record places the same plate 14 km away at 8:50 PM. Q-02: Are both clocks accurately set? Q-03: Is the nine-minute interval physically consistent with the distance?DOCUMENT 10  HEARING TRANSCRIPT
+
+Hearing 3 | Synthetic training document Case name State vs Vikram Nair Case / file number NS-DEMO-002 / FIR 208-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Third hearing: a digital-forensics witness proposes a possible clock-drift explanation for the toll record; the defence disputes that it is specific enough to rely on.
+
+Hearing date 21 August 2026 Hearing type Expert testimony  digital timestamp reconciliation Transcript status Prepared synthetic transcript
+
+Transcript
+
+[00:00:05] COURT The prosecution may call its digital-forensics witness.
+
+[00:00:20] EXPERT WITNESS I have reviewed a manufacturer service bulletin for this model of toll-plaza ANPR unit. It documents a typical clock drift of approximately twelve minutes in units that have not been resynchronised within the last service interval.
+
+[00:00:55] EXPERT WITNESS If that drift applied here, the actual passage time may have been closer to 9:02 PM, which would allow approximately twenty-one minutes for the fourteen-kilometre journey.
+
+[00:01:30] DEFENCE COUNSEL The bulletin describes typical drift across units generally. It is not a site-specific calibration record for this particular toll lane on this date. [00:01:50] EXPERT WITNESS That is correct. I have not seen a lane-specific calibration log for this unit. [00:02:10] DEFENCE COUNSEL We request production of the toll plaza's own calibration log before this explanation is accepted.
+
+[00:02:28] PROSECUTOR We will request that record from the toll authority.
+
+[00:02:40] COURT The proposed clock-drift explanation is noted but not accepted as established. The apparent conflict between Exhibit E-03 and Exhibit E-04 remains unresolved and continues to require human review. The matter is adjourned pending the site-specific calibration record.
+
+Extracted audit items
+
+C-04: A twelve-minute clock-drift bulletin is offered to reconcile E-03 and E-04. Q-04: Does a general manufacturer bulletin establish the actual drift of this specific unit? Status: Unresolved  adjourned for further record production.Source and use notes
+
+The facts, names, events, exhibits, and records in this pack were created synthetically. Public web references were used only to understand broad document structure and are not evidence in this fictional case.
+
+The FIR and final-report layouts follow the same fictional-demonstration format used in the NS-DEMO-001 pack, loosely informed by public police-form references such as the Puducherry Police Manual's FIR and final-report templates. Exact forms and current statutory terminology vary by jurisdiction and date.
+
+Use this pack only for the NyayaSahayak hackathon demonstration. Do not present these documents as genuine records, submit them to an authority, or use them to make a real legal decision.

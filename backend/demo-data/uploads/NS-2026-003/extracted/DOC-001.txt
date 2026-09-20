@@ -1,0 +1,71 @@
+NyayaSahayak  Synthetic Case Document Pack Updated case-identification fields | Case ID: NS-DEMO-001
+
+DEMO-ONLY NOTICE: These documents are synthetic materials created for a hackathon prototype. They are not FIRs, police records, court records, legal advice, or authentic government documents.
+
+Case identification Field Entry Case name * State vs Arun Kumar How you refer to this matter State vs Arun Kumar  Lakshmi Stores Presence and Identification Matter Case / file number NS-DEMO-001 / FIR 112-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court / Central Market Police Station  fictional Short description
+
+A synthetic criminal-case evidence audit concerning whether Arun Kumar was near Lakshmi Stores at approximately 9:00 PM on 12 August 2025. The audit compares a witness statement, a non-conclusive CCTV summary, and approximate phone-location information.
+
+Case status Hearing in progress  synthetic Next hearing 24 September 2026  synthetic Primary legal issue
+
+Whether the available material reliably establishes the identity and presence of the accused near the alleged location.
+
+Data status All names, events, exhibits, and records are fictional. Core demonstration scenario
+
+<b>PW-3 statement:</b> PW-3 says that Arun Kumar was near the shop at approximately 9:00 PM. <b>CCTV summary:</b> An unidentified person wearing similar clothing appears near the shop at approximately 9:05 PM. <b>Phone-location summary:</b> An associated device was near the bus stand at approximately 9:02 PM. The device ownership and location accuracy remain unresolved.
+
+<b>Expected NyayaSahayak result:</b> Potentially conflicted evidence  human review required. The system must not conclude guilt, innocence, witness dishonesty, or final liability.DOCUMENT 1  FIRST INFORMATION REPORT Synthetic training document  not an official FIR Case name State vs Arun Kumar Case / file number NS-DEMO-001 / FIR 112-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court / Central Market Police Station  fictional Short description
+
+Alleged altercation near Lakshmi Stores; evidence concerns the possible presence and identification of Arun Kumar.
+
+District North Arcot Demo District Police station Central Market Police Station Date of registration 12 August 2025 Complainant Meera Raman, age 34, shop owner  fictional Place of occurrence Near Lakshmi Stores, Market Road, Demo Town Approximate time 12 August 2025, approximately 9:00 PM Investigating officer Inspector K. Dev, Badge DEMO-17  fictional Brief contents of information
+
+The complainant states that an altercation occurred near the entrance of Lakshmi Stores at approximately 9:00 PM. She reports that a person whom she believes to be Arun Kumar was present near the entrance shortly before the injured person left the location. The complainant requests examination of nearby CCTV material and witness accounts.
+
+Limitations
+
+This synthetic document records an allegation only. It does not establish that an offence occurred, that the accused was present, or that any person is legally responsible.DOCUMENT 2  FINAL REPORT / CHARGE-SHEET Synthetic training document  not an official police report Case name State vs Arun Kumar Case / file number NS-DEMO-001 / FIR 112-D / FR-17-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Synthetic final-report summary concerning an alleged presence claim and unresolved identification and location evidence.
+
+Date 30 September 2025 Investigation status Demonstration investigation completed Prosecution position Presence near the shop is alleged but identification remains subject to review Court filing status Not filed; synthetic document only Material proposed for review ID Description Limitation D-01 Synthetic FIR 112-D Records an allegation only D-02 Statement of PW-3 Limited visibility reported E-02 CCTV summary Person visible; face not conclusive E-03 Phone-location summary Approximate location; device ownership unverified D-05 Defence statement Challenges identity and location inference Assessment
+
+The synthetic material indicates a possible presence claim but contains unresolved issues concerning visibility, identity, device ownership, and approximate location. This document is not a determination that the evidence is sufficient.DOCUMENT 3  WITNESS STATEMENT Statement of PW-3 | Synthetic training document Case name State vs Arun Kumar Case / file number NS-DEMO-001 / FIR 112-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court / Central Market Police Station  fictional Short description
+
+Witness account concerning alleged presence near Lakshmi Stores at approximately 9:00 PM.
+
+Evidence ID E-01 Witness Ravi Selvam / PW-3  fictional Statement date 13 August 2025 Source location Statement paragraphs 15 Statement
+
+1. I was near the tea stall opposite Lakshmi Stores at around 9:00 PM on 12 August 2025.<br/>2. I saw a person whom I believed to be Arun Kumar near the entrance. The person was wearing a dark shirt.<br/>3. The area had one streetlight, but visibility was not very good.<br/>4. During initial questioning, I stated that I had been approximately two kilometres away before returning near the shop. I do not remember the exact time.<br/>5. I cannot state with complete certainty that the person in the CCTV summary is Arun Kumar.
+
+Audit annotations Item Result Claim C-01 PW-3 says Arun Kumar was near the shop at approximately 9 PM Limitation L-01 Poor visibility Limitation L-02 Face not clearly observed Potential issue X-01 Earlier location account may require clarificationDOCUMENT 4  CCTV SUMMARY Exhibit E-02 | Synthetic training document  no real footage attached This is a text summary created for demonstration. It is not a real CCTV extract, image, video, or forensic report. Case name State vs Arun Kumar Case / file number NS-DEMO-001 / FIR 112-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Synthetic CCTV description used to assess whether an unidentified person near the shop can be linked to Arun Kumar.
+
+Evidence ID E-02 Camera ID C-04 Location Lakshmi Stores entrance  fictional Date / time window 12 August 2025 / 8:55 PM9:15 PM Source Synthetic camera-log summary Summary
+
+At approximately 9:05 PM, a person wearing a dark shirt appears near the entrance of Lakshmi Stores. The persons general height and clothing appear similar to PW-3s description. The face is partially obscured by angle and lighting. The summary does not permit conclusive identification.
+
+Audit interpretation Relationship to C-01 Assessment Possible support Consistent with a person matching the general description being near the shop. Unresolved identity Does not establish that the person is Arun Kumar. Human review
+
+Inspect original footage if available and assess image quality, continuity, and chain of custody.DOCUMENT 5  HEARING TRANSCRIPT Hearing 4 | Synthetic training document Case name State vs Arun Kumar Case / file number NS-DEMO-001 / FIR 112-D (synthetic) Case type Criminal Jurisdiction Tamil Nadu, India  fictional demonstration jurisdiction Court / institution Demo District Court  fictional Short description
+
+Hearing material examining witness identification, CCTV limitations, and approximate phone-location evidence.
+
+Hearing date 18 September 2026 Hearing type Evidence and witness review Transcript status Prepared synthetic transcript Transcript [00:00:05] COURT The prosecution may continue the examination of PW-3. [00:00:26] PW-3 I was near the shop at approximately 9 PM. [00:00:44] PW-3 Yes. I saw Arun Kumar near the entrance of the shop. [00:01:16] PW-3 There was only one streetlight, and it was not very bright.
+
+[00:01:30] DEFENCE COUNSEL
+
+In your earlier statement, did you say that you were approximately two kilometres away? [00:01:41] PW-3 I may have said that during the first questioning. [00:02:05] PROSECUTOR The CCTV summary records a person near the shop at 9:05 PM. [00:02:28] PW-3 I cannot say that the face is completely clear. [00:02:45] COURT The CCTV summary shall be marked as Exhibit E-02.
+
+[00:03:00] DEFENCE COUNSEL
+
+The phone-location summary places the associated device near the bus stand at 9:02 PM. [00:03:14] PROSECUTOR The device location is approximate and does not prove the exact position of the accused. [00:03:32] COURT The phone-location summary shall be marked as Exhibit E-03. [00:03:48] COURT The prosecution shall clarify device ownership and the accuracy of the location estimate at the next hearing. Extracted audit items
+
+C-01: Accused allegedly near shop at 9 PM. C-02: CCTV records a person near the shop at 9:05 PM. C-03: Associated device was near the bus stand at 9:02 PM. Q-01: Was the phone carried by the accused? Q-02: Is the CCTV image sufficient for identification?Source and use notes
+
+The facts, names, events, exhibits, and records in this pack were created synthetically. Public web references were used only to understand broad document structure and are not evidence in this fictional case.
+
+The FIR and final-report layouts were loosely informed by public police-form references, including the Puducherry Police Manuals FIR and final-report templates: https://police.py.gov.in/Police%20manual/Forms%20pdf/FORM%20IF%201.pdf and https://police.py.gov.in/Police%20manual/Forms%20pdf/FORM-%20IF5.pdf. Exact forms and current statutory terminology vary by jurisdiction and date.
+
+Use this pack only for the NyayaSahayak hackathon demonstration. Do not present these documents as genuine records, submit them to an authority, or use them to make a real legal decision.

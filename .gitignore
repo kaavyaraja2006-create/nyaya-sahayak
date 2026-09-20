@@ -1,0 +1,5 @@
+dist/config.js
+shots/
+node_modules/
+.env
+.env.example

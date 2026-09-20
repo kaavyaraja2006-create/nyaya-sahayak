@@ -1,0 +1,23 @@
+NyayaSahayak — Synthetic Hearing Transcript
+Case: State vs Vikram Nair | Case ID: NS-DEMO-002 | FIR 208-D (synthetic)
+DEMO-ONLY: Fictional material for hackathon demonstration only. Not a real court record.
+
+Hearing 1 — Preliminary witness and exhibit review
+Hearing date: 10 July 2026
+Court / institution: Demo District Court — fictional
+
+Transcript
+[00:00:04] COURT The prosecution may begin the examination of PW-2.
+[00:00:22] PW-2 I was closing my shop near the junction at around 8:40 PM.
+[00:00:40] PW-2 I heard a sound and saw a silver car had struck someone near the crossing.
+[00:01:05] PW-2 I noted the plate began with TN 07, but I could not read the rest clearly.
+[00:01:28] DEFENCE COUNSEL Was the streetlight near the junction working that evening?
+[00:01:36] PW-2 No, it was not working. It was quite dark at that spot.
+[00:02:02] PROSECUTOR The CCTV summary from Camera C-11 records a matching partial plate at 8:41 PM.
+[00:02:20] COURT The CCTV summary shall be marked as Exhibit E-02.
+[00:02:40] DEFENCE COUNSEL We reserve comment on identification until the complete plate, if any, is established.
+[00:02:55] COURT Noted. The investigating officer shall produce any available vehicle-tracking material at the next hearing.
+
+Extracted audit items
+C-01: Silver car with partial plate TN 07 allegedly struck the pedestrian near the junction at approximately 8:40 PM and fled.
+Q-01: Can the complete plate be established from any other source?

@@ -1,0 +1,18 @@
+Transcript
+[00:00:05] COURT The prosecution may continue the examination of PW-3.
+[00:00:26] PW-3 I was near the shop at approximately 9 PM.
+[00:00:44] PW-3 Yes. I saw Arun Kumar near the entrance of the shop.
+[00:01:16] PW-3 There was only one streetlight, and it was not very bright.
+[00:01:30] DEFENCE
+COUNSEL
+In your earlier statement, did you say that you were approximately two kilometres away?
+[00:01:41] PW-3 I may have said that during the first questioning.
+[00:02:05] PROSECUTOR The CCTV summary records a person near the shop at 9:05 PM.
+[00:02:28] PW-3 I cannot say that the face is completely clear.
+[00:02:45] COURT The CCTV summary shall be marked as Exhibit E-02.
+[00:03:00] DEFENCE
+COUNSEL
+The phone-location summary places the associated device near the bus stand at 9:02 PM.
+[00:03:14] PROSECUTOR The device location is approximate and does not prove the exact position of the accused.
+[00:03:32] COURT The phone-location summary shall be marked as Exhibit E-03.
+[00:03:48] COURT The prosecution shall clarify device ownership and the accuracy of the location estimate at the next hearing.

@@ -1,0 +1,5 @@
+Device location record for a handset registered to Person A.
+
+The network log places the handset registered to Person A in Location B between 9:15 PM and 9:50 PM. The record notes an accuracy radius of several hundred metres.
+
+The extraction was performed by the cyber unit on 16 March 2026. Custody documentation is attached as Exhibit P-7.

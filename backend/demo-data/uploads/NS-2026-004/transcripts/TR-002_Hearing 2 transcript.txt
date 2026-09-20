@@ -1,0 +1,23 @@
+NyayaSahayak — Synthetic Hearing Transcript
+Case: State vs Vikram Nair | Case ID: NS-DEMO-002 | FIR 208-D (synthetic)
+DEMO-ONLY: Fictional material for hackathon demonstration only. Not a real court record.
+
+Hearing 2 — Evidence review: telematics and toll record
+Hearing date: 31 July 2026
+Court / institution: Demo District Court — fictional
+
+Transcript
+[00:00:06] COURT The prosecution may present the vehicle-tracking material referred to at the last hearing.
+[00:00:24] PROSECUTOR The fleet-tracking device on vehicle TN07-AZ-4488, registered to the accused, recorded that vehicle at the junction at 8:41 PM.
+[00:00:52] COURT This shall be marked as Exhibit E-03.
+[00:01:10] DEFENCE COUNSEL We now produce a toll-booth record showing the same plate passing the Kavanur Bypass toll plaza, fourteen kilometres away, at 8:50 PM.
+[00:01:38] COURT This shall be marked as Exhibit E-04.
+[00:01:50] DEFENCE COUNSEL Nine minutes is not sufficient to travel fourteen kilometres through city traffic. The two records cannot both be correct as read.
+[00:02:15] PROSECUTOR We do not concede the point. It is possible one of the two clocks is not accurately set. We request time to examine both systems' calibration records.
+[00:02:40] COURT The apparent conflict between Exhibit E-03 and Exhibit E-04 is noted. This matter requires human review and shall not be treated as resolved. The investigating officer shall obtain calibration information for both systems before the next hearing.
+
+Extracted audit items
+C-02: Telematics log places the vehicle at the junction at 8:41 PM.
+C-03: Toll record places the same plate 14 km away at 8:50 PM.
+Q-02: Are both clocks accurately set?
+Q-03: Is the nine-minute interval physically consistent with the distance?
